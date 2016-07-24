@@ -1,0 +1,12 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "node": "true",
+    "mocha": "true"
+  },
+  "rules": {
+    'strict': [2, 'global'],
+    'prefer-arrow-callback': 1,
+    'sort-imports': 1
+  }
+}
