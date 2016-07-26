@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test",
-    "lint": "eslint .; exit 0"
+    "lint": "eslint ."
   },
   "author": "David Ward",
   "license": "ISC",

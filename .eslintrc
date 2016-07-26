@@ -1,12 +1,19 @@
 {
   "extends": "airbnb-base",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": 'script',
+  },
   "env": {
     "node": "true",
     "mocha": "true"
   },
   "rules": {
-    'strict': [2, 'global'],
-    'prefer-arrow-callback': 1,
-    'sort-imports': 1
+    'arrow-parens': [2, "as-needed"],
+    'comma-dangle': [2, "never"],
+    'object-curly-spacing': [2, 'never'],
+    'object-property-newline': [0, {
+      'allowMultiplePropertiesPerLine': true,
+      }],
   }
 }
