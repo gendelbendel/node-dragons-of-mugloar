@@ -1,6 +1,6 @@
 # Dragons of Mugloar node implementation #
 
-This is a *work in progress solution* for the problem presented on [Dragons of Mugloar](http://www.dragonsofmugloar.com/).
+This is a implementation for the problem presented on [Dragons of Mugloar](http://www.dragonsofmugloar.com/).
 
 This should come up with a solution at least 50%, as specified on the page, though it should ideally win 100% of the time.
 
@@ -44,8 +44,10 @@ Should be able to send any dragon stats; knights are useless in the fog.
 * Inconsistent return results, between `GET /api/game/${gameId}` and `GET /api/game`: gameId is either a string or number respectively. The former is not a documented API endpoint, which may be part of the reason why this issue occurs (route not being updated, not being supported, etc)
 * Inconsistent return results, between `GET /api/game/${gameId}` and `GET /api/game`: knight.name changes depending on which call you make. The former is not a documented API endpoint, which may be part of the reason why this issue occurs (route not being updated, not being supported, etc)
 * When using `GET /api/game/${gameId}` gameId can be non-numerical. My intuition believes this may affect the above two bugs as well.
-* The "FOG" weather report code seems to display as "FUNDEFINEDG" instead. Strange issue.
+
+Note for the above bugs: It wasn't an endpoint that was absolutely necessary to use for the solution, and in my end solution I did not even use it.
+* The "FOG" weather report code seems to display as "FUNDEFINEDG" instead. Strange issue. Perhaps it is intended to filter out tests looking for a length of 3 in the weather code?
 
 ## Questions ##
 * What is the varX-Rating used for on the `GET weather/api/report/${gameId}` page? The numbers seem to be associated with the weather code somehow.
-* Name generation may be based on current location, though my guess is that it is probably related to the server's location, not the client's.
+* Name generation may be based on current location, though my guess is that it is probably related to the server's location, not the client's. Curious to see other regions running this and coming across different locations for the knight's names.
