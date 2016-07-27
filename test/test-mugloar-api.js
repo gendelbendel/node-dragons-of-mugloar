@@ -1,47 +1,280 @@
 'use strict';
 
-const Promise = require('bluebird')
-const chai = require('chai')
-const request = require('supertest-as-promised');
+const Promise = require('bluebird');
+const chai = require('chai');
 const mugloar = require('../lib/mugloar-api');
-const xml2js = Promise.promisifyAll(require('xml2js')).Parser({explicitArray: false});
-//const parser = new xml2js.Parser({explicitArray: false});
+const testData = require('../resources/test-data.js').gameData;
+const xml2js = Promise.promisifyAll(require('xml2js'));
 
+const parser = new xml2js.Parser({explicitArray: false});
 const expect = chai.expect;
 
 describe('Mugloar API', () => {
-  let gameId = 7795598;
+  context('#getNewGame()', () => {
+    let body = {};
+    it('should reply successfully', () => mugloar.getNewGame()
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .then(res => {
+        expect(res.body).to.be.an('object');
+        body = res.body;
+      })
+    );
 
-  // beforeEach(() => {
-  //   gameId = 7795598;
-  // });
+    it('should have a valid body', () => {
+      expect(body.gameId).to.be.a('number');
+      expect(body.knight).to.be.an('object');
+      expect(body.knight.attack).to.be.a('number');
+      expect(body.knight.armor).to.be.a('number');
+      expect(body.knight.agility).to.be.a('number');
+      expect(body.knight.endurance).to.be.a('number');
+    });
+  });
 
-  it.skip('should get a valid new game', () => mugloar.getNewGame()
-    .expect(200)
-    .expect('Content-Type', /json/)
-    .expect(res => {
-      expect(res.body).to.be.an('object');
-      expect(res.body.gameId).to.be.a('number');
-      expect(res.body.knight).to.be.an('object');
-      expect(res.body.knight.attack).to.be.a('number');
-      expect(res.body.knight.armor).to.be.a('number');
-      expect(res.body.knight.agility).to.be.a('number');
-      expect(res.body.knight.endurance).to.be.a('number');
-      this.gameId = res.body.gameId;
-      console.log('Got gameId: ' + this.gameId + '\n');
-    })
-  );
+  context('#getExistingGame()', () => {
+    let body = {};
+    let data = {};
+    before(() => {
+      data = testData.zen;
+    });
+    it('should reply successfully', () => mugloar.getExistingGame(data.gameId)
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .then(res => {
+        expect(res.body).to.be.an('object');
+        body = res.body;
+      })
+    );
 
-  it('should get the weather with given gameId', () => mugloar.getWeather(gameId)
-    .expect(200)
-    .expect('Content-Type', /xml/)
-    .expect(res => xml2js.parseStringAsync(res.text)
-      .then(xml => {
-        console.log('Current gameId: ' + this.gameId + '\n');
-        console.log(xml);
-        //expect(xml.report.code).to.be.a('string');
-        return expect(xml.report.code).to.equal('NMR');
-      }))
+    it('should have a valid body', () => {
+      expect(body.gameId).to.be.a('string');
+      expect(body.knight).to.be.an('object');
+      expect(body.knight.attack).to.be.a('number');
+      expect(body.knight.armor).to.be.a('number');
+      expect(body.knight.agility).to.be.a('number');
+      expect(body.knight.endurance).to.be.a('number');
+    });
 
-  );
+    it('should have a body that matches saved details', () => {
+      // Commented out until/if possible unintended behvavior is addressed;
+      // See README.md Bugs
+      // expect(body.gameId).to.equal(data.gameId);
+
+      // If the above is commented, remove this next line
+      expect(body.gameId).to.equal(data.gameId.toString());
+      expect(body.knight.attack).to.equal(data.knight.attack);
+      expect(body.knight.armor).to.equal(data.knight.armor);
+      expect(body.knight.agility).to.equal(data.knight.agility);
+      expect(body.knight.endurance).to.equal(data.knight.endurance);
+    });
+  });
+
+  context('#getWeather()', () => {
+    let body;
+    let data;
+    context('NMR weather', () => {
+      before(() => {
+        data = testData.nmr;
+      });
+      it('should reply successfully', () => mugloar.getWeather(data.gameId)
+        .expect(200)
+        .expect('Content-Type', /xml/)
+        .then(res => {
+          expect(res.text).to.be.a('string');
+          body = res.text;
+        })
+      );
+      it('should convert xml to json', () =>
+        parser.parseStringAsync(body)
+          .then(xml => {
+            expect(xml.report).to.be.an('object');
+            body = xml;
+          })
+      );
+      it('should contain expected weather code', () => {
+        expect(body.report.code).to.be.a('string');
+        expect(body.report.code).to.equal(data.report.code);
+      });
+    });
+    context('T E weather', () => {
+      before(() => {
+        data = testData.zen;
+      });
+      it('should reply successfully', () => mugloar.getWeather(data.gameId)
+        .expect(200)
+        .expect('Content-Type', /xml/)
+        .then(res => {
+          expect(res.text).to.be.a('string');
+          body = res.text;
+        })
+      );
+      it('should convert xml to json', () =>
+        parser.parseStringAsync(body)
+          .then(xml => {
+            expect(xml.report).to.be.an('object');
+            body = xml;
+          })
+      );
+      it('should contain expected weather code', () => {
+        expect(body.report.code).to.be.a('string');
+        expect(body.report.code).to.equal(data.report.code);
+      });
+    });
+    context('SRO weather', () => {
+      before(() => {
+        data = testData.sro;
+      });
+      it('should reply successfully', () => mugloar.getWeather(data.gameId)
+        .expect(200)
+        .expect('Content-Type', /xml/)
+        .then(res => {
+          expect(res.text).to.be.a('string');
+          body = res.text;
+        })
+      );
+      it('should convert xml to json', () =>
+        parser.parseStringAsync(body)
+          .then(xml => {
+            expect(xml.report).to.be.an('object');
+            body = xml;
+          })
+      );
+      it('should contain expected weather code', () => {
+        expect(body.report.code).to.be.a('string');
+        expect(body.report.code).to.equal(data.report.code);
+      });
+    });
+    context('HVA weather', () => {
+      before(() => {
+        data = testData.hva;
+      });
+      it('should reply successfully', () => mugloar.getWeather(data.gameId)
+        .expect(200)
+        .expect('Content-Type', /xml/)
+        .then(res => {
+          expect(res.text).to.be.a('string');
+          body = res.text;
+        })
+      );
+      it('should convert xml to json', () =>
+        parser.parseStringAsync(body)
+          .then(xml => {
+            expect(xml.report).to.be.an('object');
+            body = xml;
+          })
+      );
+      it('should contain expected weather code', () => {
+        expect(body.report.code).to.be.a('string');
+        expect(body.report.code).to.equal(data.report.code);
+      });
+    });
+    context('FOG (FUNDEFINEDG) weather', () => {
+      before(() => {
+        data = testData.fog;
+      });
+      it('should reply successfully', () => mugloar.getWeather(data.gameId)
+        .expect(200)
+        .expect('Content-Type', /xml/)
+        .then(res => {
+          expect(res.text).to.be.a('string');
+          body = res.text;
+        })
+      );
+      it('should convert xml to json', () =>
+        parser.parseStringAsync(body)
+          .then(xml => {
+            expect(xml.report).to.be.an('object');
+            body = xml;
+          })
+      );
+      it('should contain expected weather code', () => {
+        expect(body.report.code).to.be.a('string');
+        expect(body.report.code).to.equal(data.report.code);
+      });
+    });
+  });
+  context('#solveGame()', () => {
+    let body;
+    let data;
+    context('NMR weather', () => {
+      before(() => {
+        data = testData.nmr;
+      });
+      it('should reply successfully', () => mugloar.solveGame(data.gameId, data.dragon)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          body = res.body;
+        })
+      );
+      it('should contain a victory status', () => {
+        expect(body.status).to.equal('Victory');
+      });
+    });
+    context('T E weather', () => {
+      before(() => {
+        data = testData.zen;
+      });
+      it('should reply successfully', () => mugloar.solveGame(data.gameId, data.dragon)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          body = res.body;
+        })
+      );
+      it('should contain a victory status', () => {
+        expect(body.status).to.equal('Victory');
+      });
+    });
+    context('HVA weather', () => {
+      before(() => {
+        data = testData.hva;
+      });
+      it('should reply successfully', () => mugloar.solveGame(data.gameId, data.dragon)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          body = res.body;
+        })
+      );
+      it('should contain a victory status', () => {
+        expect(body.status).to.equal('Victory');
+      });
+    });
+    context('SRO weather', () => {
+      before(() => {
+        data = testData.sro;
+      });
+      it('should reply successfully', () => mugloar.solveGame(data.gameId, data.dragon)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          body = res.body;
+        })
+      );
+      it('should contain a victory status', () => {
+        expect(body.status).to.equal('Victory');
+      });
+    });
+    context('FOG (FUNDEFINEDG) weather', () => {
+      before(() => {
+        data = testData.fog;
+      });
+      it('should reply successfully', () => mugloar.solveGame(data.gameId, data.dragon)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          body = res.body;
+        })
+      );
+      it('should contain a victory status', () => {
+        expect(body.status).to.equal('Victory');
+      });
+    });
+  });
 });
