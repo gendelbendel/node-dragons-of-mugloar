@@ -22,6 +22,48 @@ exports.gameData = {
       code: 'NMR'
     }
   },
+  nmrtwo: {
+    gameId: '8105031',
+    knight: {
+      name: 'Sir. Max Alvarez of Ontario',
+      attack: 5,
+      armor: 3,
+      agility: 5,
+      endurance: 7
+    },
+    dragon: {
+      dragon: { // stats need to be calculated per normal weather
+        scaleThickness: 4,
+        clawSharpness: 2,
+        wingStrength: 4,
+        fireBreath: 10
+      }
+    },
+    report: {
+      code: 'NMR'
+    }
+  },
+  nmrthree: {
+    gameId: '6105016',
+    knight: {
+      name: 'Sir. Max Alvarez of Ontario',
+      attack: 0,
+      armor: 6,
+      agility: 7,
+      endurance: 7
+    },
+    dragon: {
+      dragon: { // stats need to be calculated per normal weather
+        scaleThickness: 4,
+        clawSharpness: 2,
+        wingStrength: 4,
+        fireBreath: 10
+      }
+    },
+    report: {
+      code: 'NMR'
+    }
+  },
   zen: {
     gameId: 7795598,
     knight: {
