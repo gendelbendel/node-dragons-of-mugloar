@@ -1,6 +1,27 @@
 'use strict';
 
 exports.gameData = {
+  nmr: {
+    gameId: 5158282,
+    knight: {
+      name: 'Sir. Marcus Soto of Northwest Territories',
+      attack: 2,
+      armor: 5,
+      agility: 6,
+      endurance: 7
+    },
+    dragon: {
+      dragon: { // stats need to be calculated per normal weather
+        scaleThickness: 1,
+        clawSharpness: 6,
+        wingStrength: 4,
+        fireBreath: 9
+      }
+    },
+    report: {
+      code: 'NMR'
+    }
+  },
   zen: {
     gameId: 7795598,
     knight: {
@@ -11,7 +32,7 @@ exports.gameData = {
       endurance: 8
     },
     dragon: {
-      dragon: {
+      dragon: { // all stats must be 5
         scaleThickness: 5,
         clawSharpness: 5,
         wingStrength: 5,
@@ -20,27 +41,6 @@ exports.gameData = {
     },
     report: {
       code: 'T E'
-    }
-  },
-  nmr: {
-    gameId: 5158282,
-    knight: {
-      name: "Sir. Marcus Soto of Northwest Territories",
-      attack: 2,
-      armor: 5,
-      agility: 6,
-      endurance: 7
-    },
-    dragon: {
-      dragon: {
-        scaleThickness: 1,
-        clawSharpness: 6,
-        wingStrength: 4,
-        fireBreath: 9
-      }
-    },
-    report: {
-      code: 'NMR'
     }
   },
   hva: {
@@ -53,7 +53,7 @@ exports.gameData = {
       endurance: 7
     },
     dragon: {
-      dragon: {
+      dragon: { // needs 10 claw and 0 fire, rest dont matter
         scaleThickness: 10,
         clawSharpness: 10,
         wingStrength: 0,
@@ -67,13 +67,13 @@ exports.gameData = {
   sro: {
     gameId: 4804977,
     knight: {
-      name: "Sir. Chris Willis of Saskatchewan",
+      name: 'Sir. Chris Willis of Saskatchewan',
       attack: 5,
       armor: 5,
       agility: 8,
       endurance: 2
     },
-    dragon: {},
+    dragon: {}, // dont send the dragon
     report: {
       code: 'SRO'
     }
@@ -81,14 +81,14 @@ exports.gameData = {
   fog: {
     gameId: 12323,
     knight: {
-      name: "Sir. Kyle Bowers of Quebec",
+      name: 'Sir. Kyle Bowers of Quebec',
       attack: 6,
       armor: 7,
       agility: 3,
       endurance: 4
     },
     dragon: {
-      dragon: {
+      dragon: { // stats can be random
         scaleThickness: 10,
         clawSharpness: 10,
         wingStrength: 0,
@@ -99,4 +99,4 @@ exports.gameData = {
       code: 'FUNDEFINEDG' // don't ask me
     }
   }
-}
+};

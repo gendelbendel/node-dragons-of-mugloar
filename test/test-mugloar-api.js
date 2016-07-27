@@ -10,7 +10,6 @@ const parser = new xml2js.Parser({explicitArray: false});
 const expect = chai.expect;
 
 describe('Mugloar API', () => {
-
   context('#getNewGame()', () => {
     let body = {};
     it('should reply successfully', () => mugloar.getNewGame()
@@ -95,7 +94,6 @@ describe('Mugloar API', () => {
       it('should contain expected weather code', () => {
         expect(body.report.code).to.be.a('string');
         expect(body.report.code).to.equal(data.report.code);
-        expect(body.report.code).to.have.lengthOf(3);
       });
     });
     context('T E weather', () => {
@@ -120,7 +118,6 @@ describe('Mugloar API', () => {
       it('should contain expected weather code', () => {
         expect(body.report.code).to.be.a('string');
         expect(body.report.code).to.equal(data.report.code);
-        expect(body.report.code).to.have.lengthOf(3);
       });
     });
     context('SRO weather', () => {
@@ -145,7 +142,6 @@ describe('Mugloar API', () => {
       it('should contain expected weather code', () => {
         expect(body.report.code).to.be.a('string');
         expect(body.report.code).to.equal(data.report.code);
-        expect(body.report.code).to.have.lengthOf(3);
       });
     });
     context('HVA weather', () => {
@@ -170,7 +166,6 @@ describe('Mugloar API', () => {
       it('should contain expected weather code', () => {
         expect(body.report.code).to.be.a('string');
         expect(body.report.code).to.equal(data.report.code);
-        expect(body.report.code).to.have.lengthOf(3);
       });
     });
     context('FOG (FUNDEFINEDG) weather', () => {
@@ -195,13 +190,91 @@ describe('Mugloar API', () => {
       it('should contain expected weather code', () => {
         expect(body.report.code).to.be.a('string');
         expect(body.report.code).to.equal(data.report.code);
-        expect(body.report.code).to.have.lengthOf(3);
       });
     });
-
   });
-
   context('#solveGame()', () => {
-
+    let body;
+    let data;
+    context('NMR weather', () => {
+      before(() => {
+        data = testData.nmr;
+      });
+      it('should reply successfully', () => mugloar.solveGame(data.gameId, data.dragon)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          body = res.body;
+        })
+      );
+      it('should contain a victory status', () => {
+        expect(body.status).to.equal('Victory');
+      });
+    });
+    context('T E weather', () => {
+      before(() => {
+        data = testData.zen;
+      });
+      it('should reply successfully', () => mugloar.solveGame(data.gameId, data.dragon)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          body = res.body;
+        })
+      );
+      it('should contain a victory status', () => {
+        expect(body.status).to.equal('Victory');
+      });
+    });
+    context('HVA weather', () => {
+      before(() => {
+        data = testData.hva;
+      });
+      it('should reply successfully', () => mugloar.solveGame(data.gameId, data.dragon)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          body = res.body;
+        })
+      );
+      it('should contain a victory status', () => {
+        expect(body.status).to.equal('Victory');
+      });
+    });
+    context('SRO weather', () => {
+      before(() => {
+        data = testData.sro;
+      });
+      it('should reply successfully', () => mugloar.solveGame(data.gameId, data.dragon)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          body = res.body;
+        })
+      );
+      it('should contain a victory status', () => {
+        expect(body.status).to.equal('Victory');
+      });
+    });
+    context('FOG (FUNDEFINEDG) weather', () => {
+      before(() => {
+        data = testData.fog;
+      });
+      it('should reply successfully', () => mugloar.solveGame(data.gameId, data.dragon)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          body = res.body;
+        })
+      );
+      it('should contain a victory status', () => {
+        expect(body.status).to.equal('Victory');
+      });
+    });
   });
 });
